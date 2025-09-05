@@ -1,0 +1,205 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { STATE_GUIDES, SCRIPTS } from '@/lib/constants';
+import { generateId } from '@/lib/utils';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { action, data } = body;
+
+    switch (action) {
+      case 'get_rights':
+        return handleGetRights(data);
+      
+      case 'start_recording':
+        return handleStartRecording(data);
+      
+      case 'stop_recording':
+        return handleStopRecording(data);
+      
+      case 'get_scripts':
+        return handleGetScripts(data);
+      
+      case 'generate_summary':
+        return handleGenerateSummary(data);
+      
+      default:
+        return NextResponse.json(
+          { error: 'Unknown action' },
+          { status: 400 }
+        );
+    }
+  } catch (error) {
+    console.error('Frame action error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+async function handleGetRights(data: any) {
+  const { state, language = 'en' } = data;
+  
+  if (!state) {
+    return NextResponse.json(
+      { error: 'State is required' },
+      { status: 400 }
+    );
+  }
+
+  const stateGuide = STATE_GUIDES[state];
+  if (!stateGuide) {
+    return NextResponse.json(
+      { error: 'State not supported' },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      stateName: stateGuide.stateName,
+      rights: stateGuide.rights,
+      dosAndDonts: stateGuide.dosAndDonts,
+      timestamp: new Date().toISOString()
+    }
+  });
+}
+
+async function handleStartRecording(data: any) {
+  const { userId, location } = data;
+  
+  const incidentId = generateId();
+  const incident = {
+    incidentId,
+    userId: userId || 'anonymous',
+    timestamp: new Date().toISOString(),
+    location: location || { state: 'Unknown', latitude: 0, longitude: 0 },
+    status: 'recording',
+    notes: '',
+    rightsInfoSummary: location?.state ? 
+      `Recording started in ${location.state}` : 
+      'Recording started - location unknown'
+  };
+
+  // In a real app, save to database
+  console.log('Recording started:', incident);
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      incidentId,
+      message: 'Recording started successfully',
+      timestamp: incident.timestamp
+    }
+  });
+}
+
+async function handleStopRecording(data: any) {
+  const { incidentId, duration, recordingUrl } = data;
+  
+  if (!incidentId) {
+    return NextResponse.json(
+      { error: 'Incident ID is required' },
+      { status: 400 }
+    );
+  }
+
+  // In a real app, update database record
+  const updatedIncident = {
+    incidentId,
+    status: 'completed',
+    duration: duration || 0,
+    recordingUrl: recordingUrl || null,
+    completedAt: new Date().toISOString()
+  };
+
+  console.log('Recording stopped:', updatedIncident);
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      incidentId,
+      message: 'Recording stopped successfully',
+      duration: updatedIncident.duration
+    }
+  });
+}
+
+async function handleGetScripts(data: any) {
+  const { language = 'en', category } = data;
+  
+  let scripts = SCRIPTS;
+  
+  if (category) {
+    scripts = scripts.filter(script => script.category === category);
+  }
+
+  const localizedScripts = scripts.map(script => ({
+    id: script.id,
+    scenario: script.scenario,
+    title: script.title,
+    content: script.content[language as 'en' | 'es'] || script.content.en,
+    category: script.category
+  }));
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      scripts: localizedScripts,
+      language,
+      total: localizedScripts.length
+    }
+  });
+}
+
+async function handleGenerateSummary(data: any) {
+  const { incidentId, incident } = data;
+  
+  if (!incident) {
+    return NextResponse.json(
+      { error: 'Incident data is required' },
+      { status: 400 }
+    );
+  }
+
+  const summary = {
+    id: incidentId || generateId(),
+    title: `Incident Summary - ${new Date(incident.timestamp).toLocaleDateString()}`,
+    location: `${incident.location.city || 'Unknown City'}, ${incident.location.state}`,
+    timestamp: incident.timestamp,
+    duration: incident.duration ? `${Math.floor(incident.duration / 60)} minutes` : 'Unknown',
+    status: incident.status,
+    rightsInfo: incident.rightsInfoSummary,
+    notes: incident.notes || 'No additional notes',
+    generatedAt: new Date().toISOString()
+  };
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      summary,
+      shareableText: generateShareableText(summary)
+    }
+  });
+}
+
+function generateShareableText(summary: any): string {
+  return `
+INCIDENT SUMMARY - ${summary.title}
+
+📍 Location: ${summary.location}
+⏰ Time: ${new Date(summary.timestamp).toLocaleString()}
+⏱️ Duration: ${summary.duration}
+📊 Status: ${summary.status}
+
+🛡️ Rights Information:
+${summary.rightsInfo}
+
+📝 Notes:
+${summary.notes}
+
+Generated by Guardiant - Your Pocket Rights Advisor
+`.trim();
+}

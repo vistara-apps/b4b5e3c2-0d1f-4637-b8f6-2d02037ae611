@@ -9,39 +9,84 @@ export function Dashboard() {
       label: 'Total Recordings',
       value: SAMPLE_STATS.totalRecordings.toLocaleString(),
       icon: BarChart3,
-      color: 'text-blue-400'
+      color: 'text-blue-400',
+      change: '+12.3%'
     },
     {
       label: 'Active Users',
       value: SAMPLE_STATS.activeUsers.toLocaleString(),
       icon: Users,
-      color: 'text-green-400'
+      color: 'text-green-400',
+      change: '+23.7%'
     },
     {
       label: 'States Supported',
       value: SAMPLE_STATS.statesSupported.toString(),
       icon: MapPin,
-      color: 'text-purple-400'
+      color: 'text-purple-400',
+      change: 'All 50'
     },
     {
       label: 'Scripts Available',
       value: SAMPLE_STATS.scriptsAvailable.toString(),
       icon: FileText,
-      color: 'text-pink-400'
+      color: 'text-pink-400',
+      change: 'Multi-lang'
+    }
+  ];
+
+  const additionalStats = [
+    {
+      label: 'Incidents Recorded',
+      value: SAMPLE_STATS.incidentsRecorded.toLocaleString(),
+      icon: BarChart3,
+      color: 'text-orange-400'
+    },
+    {
+      label: 'Summaries Generated',
+      value: SAMPLE_STATS.summariesGenerated.toLocaleString(),
+      icon: FileText,
+      color: 'text-cyan-400'
+    },
+    {
+      label: 'Daily Rights Access',
+      value: SAMPLE_STATS.rightsAccessedDaily.toLocaleString(),
+      icon: Users,
+      color: 'text-yellow-400'
     }
   ];
 
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
+      {/* Primary Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <div key={index} className="metric-card">
             <div className="flex items-center justify-between mb-2">
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              <TrendingUp className="w-4 h-4 text-gray-400" />
+              <div className="text-xs text-green-400 font-medium">
+                {stat.change}
+              </div>
             </div>
             <div className="text-2xl font-bold text-white mb-1">
+              {stat.value}
+            </div>
+            <div className="text-sm text-gray-300">
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Additional Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {additionalStats.map((stat, index) => (
+          <div key={index} className="metric-card">
+            <div className="flex items-center justify-between mb-2">
+              <stat.icon className={`w-5 h-5 ${stat.color}`} />
+              <TrendingUp className="w-4 h-4 text-gray-400" />
+            </div>
+            <div className="text-xl font-bold text-white mb-1">
               {stat.value}
             </div>
             <div className="text-sm text-gray-300">

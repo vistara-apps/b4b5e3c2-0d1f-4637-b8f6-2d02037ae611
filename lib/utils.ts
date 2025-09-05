@@ -77,7 +77,10 @@ export function formatTimestamp(date: Date): string {
 
 // Check if browser supports media recording
 export function supportsMediaRecording(): boolean {
-  return typeof MediaRecorder !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+  return typeof MediaRecorder !== 'undefined' && 
+         typeof navigator !== 'undefined' && 
+         navigator.mediaDevices && 
+         typeof navigator.mediaDevices.getUserMedia === 'function';
 }
 
 // Request media permissions

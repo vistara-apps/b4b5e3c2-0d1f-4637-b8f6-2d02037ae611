@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "name": "guardiant-base-miniapp",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/frame/image",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
+    }
+  ],
+  "functions": {
+    "app/api/frame/image/route.ts": {
+      "maxDuration": 10
+    },
+    "app/api/farcaster/frame-actions/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_BASE_URL": "@guardiant-base-url"
+  }
+}
