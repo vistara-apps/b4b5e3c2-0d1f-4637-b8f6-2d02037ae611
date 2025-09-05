@@ -1,62 +1,8 @@
 import { StateGuide, Script } from './types';
+import { STATE_GUIDES } from './state-guides';
 
-// Sample state guides data
-export const STATE_GUIDES: Record<string, StateGuide> = {
-  'California': {
-    stateName: 'California',
-    rights: [
-      'You have the right to remain silent',
-      'You have the right to refuse consent to search',
-      'You have the right to ask if you are free to leave',
-      'You have the right to record police interactions',
-      'You have the right to an attorney'
-    ],
-    dosAndDonts: {
-      dos: [
-        'Keep your hands visible',
-        'Stay calm and polite',
-        'Ask "Am I free to leave?"',
-        'Record the interaction if safe',
-        'Remember badge numbers and patrol car numbers'
-      ],
-      donts: [
-        'Don\'t resist, even if you believe the stop is unfair',
-        'Don\'t argue or become confrontational',
-        'Don\'t consent to searches',
-        'Don\'t lie or provide false information',
-        'Don\'t reach for anything without permission'
-      ]
-    },
-    scripts: []
-  },
-  'New York': {
-    stateName: 'New York',
-    rights: [
-      'You have the right to remain silent',
-      'You have the right to refuse consent to search',
-      'You have the right to ask if you are free to leave',
-      'You have the right to record police interactions',
-      'You have the right to an attorney'
-    ],
-    dosAndDonts: {
-      dos: [
-        'Keep your hands visible',
-        'Stay calm and polite',
-        'Ask "Am I free to leave?"',
-        'Record the interaction if safe',
-        'Remember badge numbers and patrol car numbers'
-      ],
-      donts: [
-        'Don\'t resist, even if you believe the stop is unfair',
-        'Don\'t argue or become confrontational',
-        'Don\'t consent to searches',
-        'Don\'t lie or provide false information',
-        'Don\'t reach for anything without permission'
-      ]
-    },
-    scripts: []
-  }
-};
+// Re-export STATE_GUIDES for backward compatibility
+export { STATE_GUIDES };
 
 // Sample scripts
 export const SCRIPTS: Script[] = [
@@ -109,9 +55,12 @@ Object.keys(STATE_GUIDES).forEach(state => {
 
 // Sample statistics for dashboard
 export const SAMPLE_STATS = {
-  totalRecordings: 1247,
-  activeUsers: 8934,
+  totalRecordings: 12847,
+  activeUsers: 28934,
   statesSupported: 50,
-  scriptsAvailable: 24,
-  monthlyGrowth: 15.2
+  scriptsAvailable: SCRIPTS.length,
+  monthlyGrowth: 23.7,
+  incidentsRecorded: 8456,
+  summariesGenerated: 6234,
+  rightsAccessedDaily: 1523
 };
