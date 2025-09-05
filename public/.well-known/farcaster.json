@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "1",
+    "name": "Guardiant",
+    "subtitle": "Built with Zara",
+    "description": "Guardiant is a Base Mini App built with Zara.",
+    "iconUrl": "https://0co.to/images/zara-2.png",
+    "homeUrl": "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app",
+    "splashImageUrl": "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app/splash.png",
+    "splashBackgroundColor": "#000000",
+    "heroImageUrl": "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app/image.png",
+    "tagline": "Guardiant",
+    "screenshotUrls": [
+      "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app/screenshot.png",
+      "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "miniapp",
+      "onchainkit"
+    ],
+    "webhookUrl": "https://b4b5e3c20d1f4637b8f62d02037ae611-eyx4.vercel.app/api/webhook"
+  }
+}
