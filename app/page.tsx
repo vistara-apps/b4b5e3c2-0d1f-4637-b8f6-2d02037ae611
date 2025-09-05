@@ -164,7 +164,7 @@ export default function GuardiantApp() {
             <div className="space-y-6">
               <RightsCard 
                 variant="detailed"
-                stateGuide={stateGuide}
+                stateGuide={stateGuide || undefined}
                 location={location?.state}
               />
               
@@ -262,7 +262,7 @@ export default function GuardiantApp() {
               </div>
 
               <ShareButton
-                incident={currentIncident}
+                incident={currentIncident || undefined}
                 onShare={(method) => console.log('Shared via:', method)}
               />
 
